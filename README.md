@@ -2,7 +2,7 @@
 
 Snake game built using Swift, playable on any browser using WebAssembly.
 
-UI build using [Tokamak](https://github.com/TokamakUI/Tokamak), which is a SwiftUI compatible framework for WebAssembly. Interaction with the DOM is done through [JavaScriptKit](https://github.com/swiftwasm/JavaScriptKit).
+UI built using [Tokamak](https://github.com/TokamakUI/Tokamak), which is a SwiftUI compatible framework for WebAssembly. Interaction with the DOM is done through [JavaScriptKit](https://github.com/swiftwasm/JavaScriptKit).
 
 ## Contributing
 If you ind any bugs or have any improvement suggestions, please open an issue first. If you get green light, you can open a pull request.

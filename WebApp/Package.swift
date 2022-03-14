@@ -15,8 +15,5 @@ let package = Package(
             dependencies: [
                 .product(name: "TokamakDOM", package: "Tokamak")
             ]),
-        .testTarget(
-            name: "WebAppTests",
-            dependencies: ["WebApp"]),
-    ]
+	]
 )

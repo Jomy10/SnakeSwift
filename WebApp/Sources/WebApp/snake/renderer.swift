@@ -91,17 +91,19 @@ extension GraphicsRenderer {
     func handleNextFrame() {
         // Handle events
         var addTailThisFrame = false
+        var newMoveDir = self.moveDirection
         while !events.isEmpty {
             let event = events.remove(at: 0)
             if event.isMoveAction {
                 // Don't allow 180° turns
                 if !self.moveDirection.isOpositeOf(event) {
-                    self.moveDirection = event
+                    newMoveDir = event
                 }
             } else if event == .AddTail {
                 addTailThisFrame = true
             }
         }
+        self.moveDirection = newMoveDir
         
         // Move character
         switch self.moveDirection {

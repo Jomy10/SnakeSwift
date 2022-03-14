@@ -1,4 +1,7 @@
-#!/usr/local/bin zsh
+#!/usr/bin/env zsh
 
-carton build
+set -e
+
+carton bundle
+rm -r ../public || true
 mv Bundle ../public
