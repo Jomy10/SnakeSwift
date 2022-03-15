@@ -10,7 +10,7 @@ import Foundation
 import JavaScriptKit
 import TokamakDOM
 
-func startGame(
+public func startGame(
     gc: inout GraphicsContext,
     cSize: CGSize,
     onPoint: @escaping (Int) -> (),
@@ -80,7 +80,7 @@ func startGame(
     renderer!.drawFrame()
 }
 
-func startGameLoop(renderer: GraphicsRenderer) {
+public func startGameLoop(renderer: GraphicsRenderer) {
     // Start with 2 frames per second (snake moves twice per second)
     loop = GameLoop(fps: 2, callback: {
         renderer.handleNextFrame()

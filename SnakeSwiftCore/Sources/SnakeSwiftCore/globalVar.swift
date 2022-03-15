@@ -8,7 +8,7 @@
 
 import Foundation
 
-var renderer: GraphicsRenderer? = nil
+public var renderer: GraphicsRenderer? = nil
 
 /// Game loop running at x fps
-var loop: GameLoop?
+public var loop: GameLoop?

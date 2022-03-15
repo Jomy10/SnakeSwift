@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum GameEvent {
+public enum GameEvent {
     case MoveUp
     case MoveDown
     case MoveLeft
@@ -18,7 +18,7 @@ enum GameEvent {
 }
 
 extension GameEvent {
-    var isMoveAction: Bool {
+    public var isMoveAction: Bool {
         if self == .MoveUp || self == .MoveDown || self == .MoveLeft || self == .MoveRight {
             return true
         } else {
@@ -26,7 +26,7 @@ extension GameEvent {
         }
     }
     
-    func isOpositeOf(_ other: GameEvent) -> Bool {
+    public func isOpositeOf(_ other: GameEvent) -> Bool {
         if self == .MoveUp && other == .MoveDown ||
             self == .MoveDown && other == .MoveUp ||
             self == .MoveRight && other == .MoveLeft ||

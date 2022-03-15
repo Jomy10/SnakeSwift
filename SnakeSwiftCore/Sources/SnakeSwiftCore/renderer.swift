@@ -10,7 +10,7 @@ import Foundation
 import TokamakDOM
 
 /// Renders the content to a `Canvas`. In this caes the `html canvas`
-class GraphicsRenderer {
+public class GraphicsRenderer {
     let gc: GraphicsContext
     /// Canvas size
     var size: CGSize
@@ -27,7 +27,7 @@ class GraphicsRenderer {
     /// Called when the player makes a point
     private let newScore: (Int) -> ()
     
-    init(
+    public init(
         context gc: GraphicsContext,
         canvasSize size: CGSize,
         boardSize: Int = 50,
@@ -61,7 +61,7 @@ class GraphicsRenderer {
 
 
 extension GraphicsRenderer {
-    func resetGame() {
+    public func resetGame() {
         self.board = BoardState(
             size: (rows: self.board.size.rows, cols: self.board.size.cols),
             food: Coordinate.randomCoordinate(
@@ -82,13 +82,13 @@ extension GraphicsRenderer {
 
 extension GraphicsRenderer {
     /// Call when canvas is resized
-    func onResize(newSize: CGSize) {
+    public func onResize(newSize: CGSize) {
         self.size = newSize
         self.cellSize = min(self.size.width, self.size.height) / CGFloat(self.board.size.cols)
     }
     
     /// Move player, eat food, calculate new food position, draw scene
-    func handleNextFrame() {
+    public func handleNextFrame() {
         // Handle events
         var addTailThisFrame = false
         var newMoveDir = self.moveDirection
@@ -217,7 +217,7 @@ extension GraphicsRenderer {
     }
     
     /// Draws the current state of the game
-    func drawFrame() {
+    public func drawFrame() {
         // bg
         self.gc.fill(
             Path(CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height)),
@@ -235,7 +235,7 @@ extension GraphicsRenderer {
     }
     
     /// `Path` for a rectangle
-    func rectPath(at coordinate: (x: Int, y: Int)) -> Path {
+    public func rectPath(at coordinate: (x: Int, y: Int)) -> Path {
         return Path(CGRect(
             x: CGFloat(coordinate.x)  * self.cellSize,
             y: CGFloat(coordinate.y) * self.cellSize,
@@ -244,7 +244,7 @@ extension GraphicsRenderer {
     }
  
     /// Returns the path of a food item
-    func foodPath() -> Path {
+    public func foodPath() -> Path {
         return rectPath(at: (x: self.board.food.x, y: self.board.food.y))
     }
 }
