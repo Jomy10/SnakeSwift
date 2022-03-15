@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import JavaScriptKit
-import TokamakDOM
+// TokamakShim imorts TokamakDOM for WASI, GTK for linux and SwiftUI for platforms that can use SwiftUI
+import TokamakShim
 
 public func startGame(
     gc: inout GraphicsContext,
@@ -16,6 +16,7 @@ public func startGame(
     onPoint: @escaping (Int) -> (),
     onGameOver: @escaping (Int) -> ())
 {
+    // Setup code
     // The renderer and GameLooop should only be initialized once
     if renderer == nil {
         renderer = GraphicsRenderer(
@@ -49,25 +50,9 @@ public func startGame(
                 onPoint(newScore)
             }
         )
-        // SwiftUI (For later)
-        // Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { timer  in
-        //     print("timed")
-        // })
         
-        // JS
         // handle keyboard input
-        let document = JSObject.global.document.object!
-        let keyboardHandler = KeyboardHandler(renderer!)
-        
-        let eventListener = JSClosure { key in
-            (key as [JSValue]).forEach { val in
-                if let _val = val.object?.code {
-                    keyboardHandler.handleKeyIn(key: _val)
-                }
-            }
-            return JSValue.undefined
-        }
-        let _ = document.addEventListener!("keydown", JSValue.object(eventListener))
+        KeyboardHandler.listen(renderer: renderer!)
         
         // Game loop
         startGameLoop(renderer: renderer!)
@@ -82,7 +67,13 @@ public func startGame(
 
 public func startGameLoop(renderer: GraphicsRenderer) {
     // Start with 2 frames per second (snake moves twice per second)
+    #if os(WASI)
     loop = GameLoop(fps: 2, callback: {
         renderer.handleNextFrame()
     })
+    #else
+    loop = GameLoop(fps: 2, callback: { _ in
+        renderer.handleNextFrame()
+    })
+    #endif
 }

@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "SnakeSwiftCore",
-    platforms: [.macOS(.v11)],
+    platforms: [.macOS(.v12)],
     products: [
         .library(
             name: "SnakeSwiftCore",
@@ -20,7 +20,7 @@ let package = Package(
         .target(
             name: "SnakeSwiftCore",
             dependencies: [
-                .product(name: "TokamakDOM", package: "Tokamak")
+                .product(name: "TokamakShim", package: "Tokamak")
             ]),
         .testTarget(
             name: "SnakeSwiftCoreTests",

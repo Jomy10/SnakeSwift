@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import TokamakDOM
+import TokamakShim
 
 /// Renders the content to a `Canvas`. In this caes the `html canvas`
 public class GraphicsRenderer {

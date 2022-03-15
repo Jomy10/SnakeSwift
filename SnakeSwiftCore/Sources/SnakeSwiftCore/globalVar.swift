@@ -6,8 +6,6 @@
 //  Created by Jonas Everaert on 14/03/2022.
 //
 
-import Foundation
-
 public var renderer: GraphicsRenderer? = nil
 
 /// Game loop running at x fps
