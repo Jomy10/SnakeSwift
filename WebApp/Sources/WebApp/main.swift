@@ -60,7 +60,7 @@ struct ContentView: View {
 
                     VStack {
                         Text("Highscore: \(self.highScore)")
-                        if gameOver {
+                        if self.gameOver {
                             Text("Game Over")
                             Text("Your score is: \(self.currentScore)")
                             Button("Play again") {

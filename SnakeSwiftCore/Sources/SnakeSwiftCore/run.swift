@@ -14,13 +14,15 @@ public func startGame(
     gc: inout GraphicsContext,
     cSize: CGSize,
     onPoint: @escaping (Int) -> (),
-    onGameOver: @escaping (Int) -> ())
-{
+    onGameOver: @escaping (Int) -> (),
+    /// Update view on draw
+    onDraw: @escaping () -> () = {}
+) {
     // Setup code
     // The renderer and GameLooop should only be initialized once
     if renderer == nil {
         renderer = GraphicsRenderer(
-            context: gc,
+            context: &gc,
             canvasSize: cSize,
             increaseDifficultyCallback: { fps, points in
                 let currentFps = loop?.getFps() ?? 2
@@ -43,12 +45,17 @@ public func startGame(
                 loop?.newFps(fps: min(currentFps + fps, maxSpeed))
             },
             gameOverCallback: { finalScore in
+                #if os(WASI)
                 loop = nil
+                #else
+                loop?.stop()
+                #endif
                 onGameOver(finalScore)
             },
             scoreCallback: { newScore in
                 onPoint(newScore)
-            }
+            },
+            drawCallback: onDraw
         )
         
         // handle keyboard input
@@ -56,6 +63,8 @@ public func startGame(
         
         // Game loop
         startGameLoop(renderer: renderer!)
+    } else {
+        renderer!.set(graphicsContext: &gc)
     }
     
     // Set new size (when resized)

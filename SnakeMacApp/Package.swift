@@ -19,8 +19,5 @@ let package = Package(
 
             ]
         ),
-        .testTarget(
-            name: "SnakeMacAppTests",
-            dependencies: ["SnakeMacApp"]),
     ]
 )

@@ -61,6 +61,10 @@ extension GameLoop {
         self.timer.invalidate() // Stop current timr
         self.timer = Timer.scheduledTimer(withTimeInterval: secDelay, repeats: true, block: self.callback)
     }
+    
+    public func stop() {
+        self.timer.invalidate()
+    }
 }
 #endif
 
