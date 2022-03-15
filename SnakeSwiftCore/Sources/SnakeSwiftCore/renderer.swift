@@ -7,15 +7,15 @@
 //
 
 import Foundation
-import TokamakDOM
+import TokamakShim
 
 /// Renders the content to a `Canvas`. In this caes the `html canvas`
 public class GraphicsRenderer {
-    let gc: GraphicsContext
+    private var gc: GraphicsContext
     /// Canvas size
-    var size: CGSize
-    var cellSize: CGFloat
-    var board: BoardState
+    private var size: CGSize
+    private var cellSize: CGFloat
+    private var board: BoardState
     /// The events that have to be executed in this frame
     public var events: [GameEvent]
     /// The current direction the snake is moving in (`MoveUp`, `MoveLeft`, `MoveDown`, `MoveDown`)
@@ -26,14 +26,18 @@ public class GraphicsRenderer {
     private let gameOver: (Int) -> ()
     /// Called when the player makes a point
     private let newScore: (Int) -> ()
+    /// Called when drawing to canvas has finished
+    private let drawn: () -> ()
     
     public init(
-        context gc: GraphicsContext,
+        context gc: inout GraphicsContext,
         canvasSize size: CGSize,
         boardSize: Int = 50,
         increaseDifficultyCallback: @escaping (Int, Int) -> (),
         gameOverCallback: @escaping (Int) -> (),
-        scoreCallback: @escaping (Int) -> ()
+        scoreCallback: @escaping (Int) -> (),
+        /// Called when drawn to canvas has finished (needed on macOS for now)
+        drawCallback: @escaping () -> () =  {}
     ) {
         self.gc = gc
         self.size = size
@@ -56,11 +60,16 @@ public class GraphicsRenderer {
         self.increaseDifficulty = increaseDifficultyCallback
         self.gameOver = gameOverCallback
         self.newScore = scoreCallback
+        self.drawn = drawCallback
     }
 }
 
 
 extension GraphicsRenderer {
+    public func set(graphicsContext gc: inout GraphicsContext) {
+        self.gc = gc
+    }
+    
     public func resetGame() {
         self.board = BoardState(
             size: (rows: self.board.size.rows, cols: self.board.size.cols),
@@ -221,17 +230,19 @@ extension GraphicsRenderer {
         // bg
         self.gc.fill(
             Path(CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height)),
-            with: .color(.secondary)
+            with: GraphicsContext.Shading.color(.secondary)
         )
         // Draw food item
-        self.gc.fill(self.foodPath(), with: .color(.red))
+        self.gc.fill(self.foodPath(), with: GraphicsContext.Shading.color(.red))
         // Draw player
         self.board.player.forEach { co in
             self.gc.fill(
                 self.rectPath(at: (x: co.x, y: co.y)),
-                with: .color(.green)
+                with: GraphicsContext.Shading.color(.green)
             )
         }
+        
+        self.drawn()
     }
     
     /// `Path` for a rectangle

@@ -1,3 +1,5 @@
 # SnakeSwiftCore
 
-A description of this package.
+This package contains the core game logic. 
+
+Currently supports `WASI` and `macOS`

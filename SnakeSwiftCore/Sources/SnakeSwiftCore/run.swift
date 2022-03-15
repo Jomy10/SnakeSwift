@@ -7,19 +7,22 @@
 //
 
 import Foundation
-import JavaScriptKit
-import TokamakDOM
+// TokamakShim imorts TokamakDOM for WASI, GTK for linux and SwiftUI for platforms that can use SwiftUI
+import TokamakShim
 
 public func startGame(
     gc: inout GraphicsContext,
     cSize: CGSize,
     onPoint: @escaping (Int) -> (),
-    onGameOver: @escaping (Int) -> ())
-{
+    onGameOver: @escaping (Int) -> (),
+    /// Update view on draw
+    onDraw: @escaping () -> () = {}
+) {
+    // Setup code
     // The renderer and GameLooop should only be initialized once
     if renderer == nil {
         renderer = GraphicsRenderer(
-            context: gc,
+            context: &gc,
             canvasSize: cSize,
             increaseDifficultyCallback: { fps, points in
                 let currentFps = loop?.getFps() ?? 2
@@ -42,35 +45,26 @@ public func startGame(
                 loop?.newFps(fps: min(currentFps + fps, maxSpeed))
             },
             gameOverCallback: { finalScore in
+                #if os(WASI)
                 loop = nil
+                #else
+                loop?.stop()
+                #endif
                 onGameOver(finalScore)
             },
             scoreCallback: { newScore in
                 onPoint(newScore)
-            }
+            },
+            drawCallback: onDraw
         )
-        // SwiftUI (For later)
-        // Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true, block: { timer  in
-        //     print("timed")
-        // })
         
-        // JS
         // handle keyboard input
-        let document = JSObject.global.document.object!
-        let keyboardHandler = KeyboardHandler(renderer!)
-        
-        let eventListener = JSClosure { key in
-            (key as [JSValue]).forEach { val in
-                if let _val = val.object?.code {
-                    keyboardHandler.handleKeyIn(key: _val)
-                }
-            }
-            return JSValue.undefined
-        }
-        let _ = document.addEventListener!("keydown", JSValue.object(eventListener))
+        KeyboardHandler.listen(renderer: renderer!)
         
         // Game loop
         startGameLoop(renderer: renderer!)
+    } else {
+        renderer!.set(graphicsContext: &gc)
     }
     
     // Set new size (when resized)
@@ -82,7 +76,13 @@ public func startGame(
 
 public func startGameLoop(renderer: GraphicsRenderer) {
     // Start with 2 frames per second (snake moves twice per second)
+    #if os(WASI)
     loop = GameLoop(fps: 2, callback: {
         renderer.handleNextFrame()
     })
+    #else
+    loop = GameLoop(fps: 2, callback: { _ in
+        renderer.handleNextFrame()
+    })
+    #endif
 }
