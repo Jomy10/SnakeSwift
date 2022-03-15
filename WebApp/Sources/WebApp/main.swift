@@ -1,5 +1,12 @@
+//
+//  main.swift
+//
+//  The main Tokamak App. Contains all the UI elements (only for the web).
+//
+
 import TokamakDOM
 import Foundation
+import SnakeSwiftCore
 
 struct TokamakApp: App {
     var body: some Scene {

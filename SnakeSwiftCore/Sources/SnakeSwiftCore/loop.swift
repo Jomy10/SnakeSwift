@@ -10,15 +10,15 @@ import Foundation
 import JavaScriptKit
 
 /// GameLoop for TokamakUI using Javascript timer
-struct GameLoop {
+public struct GameLoop {
     private var fps: Int = 60
-    var timer: JSTimer?
-    let callback: () -> ()
+    private var timer: JSTimer?
+    private let callback: () -> ()
 }
 
 extension GameLoop {
     /// - `callback`: gets executed every frame
-    init(fps: Int = 60, callback: @escaping () -> ()) {
+    public init(fps: Int = 60, callback: @escaping () -> ()) {
         self.fps = fps
         let milisecDelay = (1.0 / Double(self.fps)) * 1000.0
         self.callback = callback
@@ -28,13 +28,13 @@ extension GameLoop {
 
 extension GameLoop {
     /// Set a new fps
-    mutating func newFps(fps: Int) {
+    public mutating func newFps(fps: Int) {
         self.fps = fps
         let milisecDelay = (1.0 / Double(self.fps)) * 1000.0
         self.timer = JSTimer(millisecondsDelay: milisecDelay, isRepeating: true, callback: self.callback)
     }
     
-    func getFps() -> Int {
+    public func getFps() -> Int {
         self.fps
     }
 }

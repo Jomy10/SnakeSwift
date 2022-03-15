@@ -9,16 +9,16 @@
 import TokamakDOM
 import JavaScriptKit
 
-class KeyboardHandler {
+public class KeyboardHandler {
     let renderer: GraphicsRenderer
     
-    init(_ renderer: GraphicsRenderer) {
+    public init(_ renderer: GraphicsRenderer) {
         self.renderer = renderer
     }
 }
 
 extension KeyboardHandler {
-    func handleKeyIn(key: JSValue) {
+    public func handleKeyIn(key: JSValue) {
         if key == "ArrowUp" || key == "KeyW" {
             self.renderer.events.append(GameEvent.MoveUp)
         } else if key == "ArrowLeft" || key == "KeyA" {
