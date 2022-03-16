@@ -4,7 +4,7 @@ set -e
 
 cd "$(dirname "$0")"
 cd ..
-carton bundle
+carton bundle --custom-index-page Build/index.html
 rm -r ../public || true
 mv Bundle ../public
 
