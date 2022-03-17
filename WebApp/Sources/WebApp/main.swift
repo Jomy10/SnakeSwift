@@ -42,26 +42,9 @@ struct ContentView: View {
     
     @State var mobile$keyboardHandler: KeyboardHandler?
     
-    @State var debugMessage: String
-    
-    init() {
-        // TODO: init once
-        let window = JSObject.global.window.object!
-        let navigator = window.navigator.object!
-        let userAgent = navigator.userAgent.jsValue().string!
-        self.debugMessage = userAgent
-        // Should we use the more thorough version? https://stackoverflow.com/a/3540295/14874405
-        "Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|mobi".split(separator: "|").forEach { pat in
-            if userAgent.contains(pat) {
-                self.isMobile = true
-            }
-        }
-    }
-    
     var body: some View {
         GeometryReader { proxy in
             VStack {
-                Text("Debug information: \(self.debugMessage)")
                 Text("Snake")
                     .font(.system(size: self.isMobile ? 20 : 30))
                     .padding()
@@ -88,7 +71,7 @@ struct ContentView: View {
                                     }
                                 )
                             },
-                            size: CGSize(width: self.canvasSize < 100 ? 100 : self.canvasSize, height: self.canvasSize < 100 ? 100 : self.canvasSize)
+                            size: CGSize(width: self.canvasSize, height: self.canvasSize)
                         )
                     }
 
@@ -138,6 +121,17 @@ struct ContentView: View {
                     let maxHeight = screenSize.height - self.mobile$topBarSize.height - self.mobile$controllerSize.height
                     self.canvasSize = min(screenSize.width, maxHeight < 0 ? 999999 : maxHeight)
                     self.newSideBarWidth = screenSize.width
+                }
+                
+                // This has to be in onAppear, otherwise it does not work
+                // TODO: init once
+                let window = JSObject.global.window.object!
+                let navigator = window.navigator.object!
+                let userAgent = navigator.userAgent.jsValue().string!
+                let mobileRegex = try! NSRegularExpression(pattern: "Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|mobi")
+                // Should we use the more thorough version? https://stackoverflow.com/a/3540295/14874405
+                if mobileRegex.firstMatch(in: userAgent, options: [], range: NSRange.init(location: 0, length: userAgent.count)) != nil {
+                    self.isMobile = true
                 }
             }
         }
