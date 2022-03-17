@@ -42,21 +42,27 @@ struct ContentView: View {
     
     @State var mobile$keyboardHandler: KeyboardHandler?
     
+    @State var debugMessage = ""
+    
     init() {
         // TODO: init once
         let window = JSObject.global.window.object!
         let navigator = window.navigator.object!
         let userAgent = navigator.userAgent.jsValue().string!
         let mobileRegex = try! NSRegularExpression(pattern: "Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|mobi")
+        self.debugMessage = "UserAgent: " + userAgent + "<br/>"
         // Should we use the more thorough version? https://stackoverflow.com/a/3540295/14874405
         if mobileRegex.firstMatch(in: userAgent, options: [], range: NSRange.init(location: 0, length: userAgent.count)) != nil {
             self.isMobile = true
         }
+        
+        self.debugMessage += "regexMatch \(mobileRegex.firstMatch(in: userAgent, options: [], range: NSRange.init(location: 0, length: userAgent.count)))"
     }
     
     var body: some View {
         GeometryReader { proxy in
             VStack {
+                Text(self.debugMessage)
                 Text("Snake")
                     .font(.system(size: self.isMobile ? 20 : 30))
                     .padding()
@@ -121,7 +127,9 @@ struct ContentView: View {
             
                 let screenSize = proxy.size
                 if !self.isMobile {
-                    self.canvasSize = min(screenSize.width - self.sideBarSize.width, screenSize.height - self.topBarSize.height - 50 /*Extra bottom padding*/)
+                    let sWidth = screenSize.width - self.sideBarSize.width
+                    let sHeight = screenSize.height - self.topBarSize.height - 50 /*Extra bottom padding*/
+                    self.canvasSize = min(sWidth < 0 ? screenSize.width : sWidth, sHeight < 0 ? screenSize.height : sHeight )
                     self.newSideBarWidth = max(screenSize.width - self.canvasSize - (screenSize.width / 3) /*Extra padding for canvas (so it isn't against the edge*/, self.sideBarSize.width /*min width*/)
                 } else {
                     let maxHeight = screenSize.height - self.mobile$topBarSize.height - self.mobile$controllerSize.height
