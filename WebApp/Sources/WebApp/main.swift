@@ -62,7 +62,7 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { proxy in
             VStack {
-                Text(self.debugMessage)
+                Text("Debug information: \(self.debugMessage)")
                 Text("Snake")
                     .font(.system(size: self.isMobile ? 20 : 30))
                     .padding()
@@ -129,7 +129,11 @@ struct ContentView: View {
                 if !self.isMobile {
                     let sWidth = screenSize.width - self.sideBarSize.width
                     let sHeight = screenSize.height - self.topBarSize.height - 50 /*Extra bottom padding*/
-                    self.canvasSize = min(sWidth < 0 ? screenSize.width : sWidth, sHeight < 0 ? screenSize.height : sHeight )
+                    self.canvasSize = min(
+                        sWidth < 100
+                            ? screenSize.width < 100 ? 100
+                            : screenSize.width : sWidth,
+                        sHeight < 0 ? screenSize.height : sHeight )
                     self.newSideBarWidth = max(screenSize.width - self.canvasSize - (screenSize.width / 3) /*Extra padding for canvas (so it isn't against the edge*/, self.sideBarSize.width /*min width*/)
                 } else {
                     let maxHeight = screenSize.height - self.mobile$topBarSize.height - self.mobile$controllerSize.height
