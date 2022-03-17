@@ -115,11 +115,13 @@ struct ContentView: View {
                         sWidth < 100
                             ? screenSize.width < 100 ? 100
                             : screenSize.width : sWidth,
-                        sHeight < 0 ? screenSize.height : sHeight )
+                        sHeight < 0
+                        ? screenSize.height < 100 ? 9999 : screenSize.height
+                        : sHeight )
                     self.newSideBarWidth = max(screenSize.width - self.canvasSize - (screenSize.width / 3) /*Extra padding for canvas (so it isn't against the edge*/, self.sideBarSize.width /*min width*/)
                 } else {
                     let maxHeight = screenSize.height - self.mobile$topBarSize.height - self.mobile$controllerSize.height
-                    self.canvasSize = min(screenSize.width, maxHeight < 0 ? 999999 : maxHeight)
+                    self.canvasSize = min(screenSize.width, maxHeight < 100 ? 999999 : maxHeight)
                     self.newSideBarWidth = screenSize.width
                 }
                 
@@ -206,7 +208,7 @@ fileprivate struct ControllerButtonView: View {
             DynamicHTML(
                 "img",
                 [
-                    "width": "100px", "height": "100px",
+                    "width": "75px", "height": "75px",
                     "src": self.pressedSrc,
                     "alt": self.name
                 ],
@@ -219,7 +221,7 @@ fileprivate struct ControllerButtonView: View {
             DynamicHTML(
                 "img",
                 [
-                    "width": "100px", "height": "100px",
+                    "width": "75px", "height": "75px",
                     "src": self.idleSrc,
                     "alt": self.name
                 ]//,
