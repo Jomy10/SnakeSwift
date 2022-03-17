@@ -1,0 +1,5 @@
+WebApp/Bundle
+**/Package.resolved
+**/.DS_Store
+**/.vscode
+**/.swiftpm
