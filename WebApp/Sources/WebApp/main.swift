@@ -42,7 +42,7 @@ struct ContentView: View {
     
     @State var mobile$keyboardHandler: KeyboardHandler?
     
-    @State var debugMessage = ""
+    @State var debugMessage: String
     
     init() {
         // TODO: init once
@@ -50,7 +50,7 @@ struct ContentView: View {
         let navigator = window.navigator.object!
         let userAgent = navigator.userAgent.jsValue().string!
         let mobileRegex = try! NSRegularExpression(pattern: "Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|mobi")
-        self.debugMessage.append("UserAgent: " + userAgent + "<br/>")
+        self.debugMessage = "UserAgent: " + userAgent + "<br/>"
         
         print("UserAgent: \(userAgent)")
         print("===")
@@ -60,10 +60,10 @@ struct ContentView: View {
             self.isMobile = true
         }
         
-        // self.debugMessage += "regexMatch \(mobileRegex.firstMatch(in: userAgent, options: [], range: NSRange.init(location: 0, length: userAgent.count)))"
-        // print(mobileRegex.firstMatch(in: userAgent, options: [], range: NSRange.init(location: 0, length: userAgent.count)))
-        // print("===")
-        // print(self.debugMessage)
+        self.debugMessage.append("regexMatch: \(String(describing: mobileRegex.firstMatch(in: userAgent, options: [], range: NSRange.init(location: 0, length: userAgent.count))))")
+        print(mobileRegex.firstMatch(in: userAgent, options: [], range: NSRange.init(location: 0, length: userAgent.count)))
+        print("===")
+        print(self.debugMessage)
     }
     
     var body: some View {
@@ -96,7 +96,7 @@ struct ContentView: View {
                                     }
                                 )
                             },
-                            size: CGSize(width: self.canvasSize, height: self.canvasSize)
+                            size: CGSize(width: self.canvasSize < 100 ? 100 : self.canvasSize, height: self.canvasSize < 100 ? 100 : self.canvasSize)
                         )
                     }
 
