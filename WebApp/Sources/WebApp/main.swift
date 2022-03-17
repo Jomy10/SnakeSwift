@@ -51,12 +51,19 @@ struct ContentView: View {
         let userAgent = navigator.userAgent.jsValue().string!
         let mobileRegex = try! NSRegularExpression(pattern: "Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|mobi")
         self.debugMessage = "UserAgent: " + userAgent + "<br/>"
+        
+        print("UserAgent: \(userAgent)")
+        print("===")
+        print(self.debugMessage)
         // Should we use the more thorough version? https://stackoverflow.com/a/3540295/14874405
         if mobileRegex.firstMatch(in: userAgent, options: [], range: NSRange.init(location: 0, length: userAgent.count)) != nil {
             self.isMobile = true
         }
         
         self.debugMessage += "regexMatch \(mobileRegex.firstMatch(in: userAgent, options: [], range: NSRange.init(location: 0, length: userAgent.count)))"
+        print(mobileRegex.firstMatch(in: userAgent, options: [], range: NSRange.init(location: 0, length: userAgent.count)))
+        print("===")
+        print(self.debugMessage)
     }
     
     var body: some View {
