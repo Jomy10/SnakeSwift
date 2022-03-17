@@ -2,7 +2,7 @@
 import PackageDescription
 let package = Package(
     name: "WebApp",
-    platforms: [.macOS(.v11)],
+    platforms: [.macOS(.v12)],
     products: [
         .executable(name: "WebApp", targets: ["WebApp"])
     ],
@@ -16,6 +16,10 @@ let package = Package(
             dependencies: [
                 .product(name: "TokamakDOM", package: "Tokamak"),
                 .product(name: "SnakeSwiftCore", package: "SnakeSwiftCore")
-            ]),
+            ],
+            linkerSettings: [
+                .unsafeFlags(["-Xlinker", "--stack-first", "-Xlinker", "-z", "-Xlinker", "stack-size=16777216"])
+            ]
+        ),
 	]
 )

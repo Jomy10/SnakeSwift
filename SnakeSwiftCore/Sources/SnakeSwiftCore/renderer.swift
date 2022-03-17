@@ -26,7 +26,7 @@ public class GraphicsRenderer {
     private let gameOver: (Int) -> ()
     /// Called when the player makes a point
     private let newScore: (Int) -> ()
-    /// Called when drawing to canvas has finished
+    /// Called when drawing to canvas has finished, only applicable for non-WASI targets
     private let drawn: () -> ()
     
     public init(
@@ -241,8 +241,9 @@ extension GraphicsRenderer {
                 with: GraphicsContext.Shading.color(.green)
             )
         }
-        
+		#if !os(WASI)        
         self.drawn()
+		#endif
     }
     
     /// `Path` for a rectangle
