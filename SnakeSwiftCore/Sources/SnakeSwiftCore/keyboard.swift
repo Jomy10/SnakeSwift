@@ -24,14 +24,18 @@ public class KeyboardHandler {
 extension KeyboardHandler {
     public func handleKeyIn(key: JSValue) {
         if key == "ArrowUp" || key == "KeyW" {
-            self.renderer.events.append(GameEvent.MoveUp)
+            self.move(GameEvent.MoveUp)
         } else if key == "ArrowLeft" || key == "KeyA" {
-            self.renderer.events.append(GameEvent.MoveLeft)
+            self.move(GameEvent.MoveLeft)
         } else if key == "ArrowDown" || key == "KeyS" {
-            self.renderer.events.append(GameEvent.MoveDown)
+            self.move(GameEvent.MoveDown)
         } else if key == "ArrowRight" || key == "KeyD" {
-            self.renderer.events.append(GameEvent.MoveRight)
+            self.move(GameEvent.MoveRight)
         }
+    }
+    
+    public func move(_ dir: GameEvent) {
+        self.renderer.events.append(dir)
     }
     
     public static func listen(renderer: GraphicsRenderer) {

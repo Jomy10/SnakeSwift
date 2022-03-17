@@ -18,6 +18,7 @@ public func startGame(
     /// Update view on draw
     onDraw: @escaping () -> () = {}
 ) {
+    print("Start")
     // Setup code
     // The renderer and GameLooop should only be initialized once
     if renderer == nil {
@@ -33,9 +34,9 @@ public func startGame(
                     } else if points > 200 {
                         maxSpeed = 50
                     } else if points > 100 {
-                        maxSpeed = 20
-                    } else if points > 50 {
                         maxSpeed = 30
+                    } else if points > 50 {
+                        maxSpeed = 20
                     } else if points > 20 {
                         maxSpeed = 13
                     } else if points > 15 {

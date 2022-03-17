@@ -10,3 +10,6 @@ mv Bundle ../public
 
 # Build favicon
 py Build/genFavicon.py
+
+# Copy assets
+cp -r Build/assets ../public/assets
